@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BiddingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductUnitController;
+use App\Http\Controllers\UserController;
 use App\Models\Product;
 use App\Models\ProductUnit;
 use Illuminate\Http\Request;
@@ -36,6 +37,10 @@ Route::prefix('product')->middleware('auth:sanctum')->group(function(){
 Route::prefix('bidding')->middleware('auth:sanctum')->group(function(){
     Route::post('add-bidding', [BiddingController::class, 'store'])->name('add-bidding');
     Route::get('get-bidders-by-productid/{productId}', [BiddingController::class, 'getBiddersByProductId']);
+});
+
+Route::prefix('user')->middleware('auth:sanctum')->group(function(){
+    Route::get('get-user-bid-products/{userId}/{productStatus}', [UserController::class, 'getAllBidProducts']);
 });
 
 Route::get('get-product-unit', [ProductUnitController::class, 'index'])->name('get-product_unit');

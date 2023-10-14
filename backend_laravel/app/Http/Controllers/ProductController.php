@@ -43,6 +43,7 @@ class ProductController extends Controller
         return $this->success($product, 'Product added successfully');
     }
 
+    //0 : finished, 1 : on progress
     public function getLatestProducts(int $status){
         $products = Product::where('product_status', $status)->latest()->get();
         return $this->success($products, 'Products fetched successfully');
