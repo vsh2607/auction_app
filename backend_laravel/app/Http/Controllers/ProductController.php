@@ -8,20 +8,9 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
 
-
-
-
-
-    public function getLatestProducts(int $status){
-        $products = Product::where('product_status', $status)->latest()->get();
-        return $this->success($products, 'Products fetched successfully');
-
-    }
-
-
     public function store(Request $request) {
         $data = $request->validate([
-            'product_img_path' => 'image|mimes:png,jpg, jpeg|max:2048',
+            'product_img_path' => 'image|mimes:png,jpg,jpeg|max:2048',
             'product_name' => 'required|string',
             'product_size' => 'required|numeric',
             'product_unit' => 'required',
@@ -45,21 +34,28 @@ class ProductController extends Controller
             'product_unit' => $data['product_unit'],
             'product_description' => $data['product_description'],
             'product_initial_price' => $data['product_initial_price'],
-            'product_now_price' => $data['product_initial_price'],
+            'product_current_price' => $data['product_initial_price'],
             'product_ddl'=> $data['product_ddl'],
             'product_status' => 1
 
         ];
         $product = Product::create($productData);
         return $this->success($product, 'Product added successfully');
+    }
 
+    public function getLatestProducts(int $status){
+        $products = Product::where('product_status', $status)->latest()->get();
+        return $this->success($products, 'Products fetched successfully');
 
     }
 
-
-    public function show(Product $product)
-    {
+    public function show(int $productId){
+        $product = Product::where('id', $productId)->first();
+        return $this->success($product, 'Product fetched successfully');
     }
+
+
+
 
 
 }

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('product_description');
             $table->integer('product_status');
             $table->integer('product_initial_price');
-            $table->integer('product_now_price');
+            $table->integer('product_current_price');
             $table->datetime('product_ddl');
             $table->timestamps();
         });

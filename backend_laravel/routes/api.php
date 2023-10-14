@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BiddingController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductUnitController;
 use App\Models\Product;
@@ -20,17 +21,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('auth')->group(function(){
-    Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
-    Route::post('login-token', [AuthController::class, 'loginWithToken'])->middleware("auth:sanctum")->name('login_with_token');
+    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::post('login-token', [AuthController::class, 'loginWithToken'])->middleware("auth:sanctum")->name('login-token');
     Route::get('logout', [AuthController::class, 'logout'])->middleware("auth:sanctum")->name('logout');
-
 });
-
 
 Route::prefix('product')->middleware('auth:sanctum')->group(function(){
     Route::post('add-product', [ProductController::class, 'store'])->name('add-product');
     Route::get('get-products/{status}', [ProductController::class, 'getLatestProducts']);
+    Route::get('get-product/{productId}', [ProductController::class, 'show']);
+});
+
+Route::prefix('bidding')->middleware('auth:sanctum')->group(function(){
+    Route::post('add-bidding', [BiddingController::class, 'store'])->name('add-bidding');
+    Route::get('get-bidders-by-productid/{productId}', [BiddingController::class, 'getBiddersByProductId']);
 });
 
 Route::get('get-product-unit', [ProductUnitController::class, 'index'])->name('get-product_unit');

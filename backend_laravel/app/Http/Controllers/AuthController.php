@@ -13,8 +13,6 @@ class AuthController extends Controller
 
         $isValid = $this->isValidChecker($request);
 
-
-
         if(!$isValid['success']){
             return $this->error($isValid['message'], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -30,12 +28,10 @@ class AuthController extends Controller
 
     private function isValidChecker(Request $request){
 
-
-
-
         $data = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required|min:6',
+
         ]);
 
 
@@ -67,7 +63,7 @@ class AuthController extends Controller
 
         $data = $request->validate([
             'email' => 'required|unique:users|email',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:6',
             'no_telp' => 'required',
             'name' => 'required'
         ]);
