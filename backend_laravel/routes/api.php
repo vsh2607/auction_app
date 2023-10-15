@@ -40,7 +40,9 @@ Route::prefix('bidding')->middleware('auth:sanctum')->group(function(){
 });
 
 Route::prefix('user')->middleware('auth:sanctum')->group(function(){
-    Route::get('get-user-bid-products/{userId}/{productStatus}', [UserController::class, 'getAllBidProducts']);
+    Route::get('get-user-bid-products/{productStatus}', [UserController::class, 'getAllBidProducts']);
+    Route::get('get-user-profile', [UserController::class, 'show'])->name('get-user-profile');
+    Route::get('get-all-users',[UserController::class, 'getAllUsers'])->name('get-all-users');
 });
 
 Route::get('get-product-unit', [ProductUnitController::class, 'index'])->name('get-product_unit');
