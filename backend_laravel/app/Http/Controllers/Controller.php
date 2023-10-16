@@ -20,11 +20,12 @@ class Controller extends BaseController
     }
 
 
-    public function error(string $message, int $statusCode = 400){
+    public function error(string $message, int $statusCode = 400, mixed $errors){
         return response()->json([
             'data' => null,
             'success' => false,
-            'message' => $message
+            'message' => $message,
+            'errors' => $errors
         ], $statusCode);
     }
 }
