@@ -21,11 +21,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: loginRoute,
+        initialRoute: adminHomeRoute,
         routes: {
           loginRoute: (context) => const LoginPage(),
           registerRoute: (context) => const RegisterPage(),
-          adminHomeRoute: (context) => const AdminHomePage(),
+          adminHomeRoute: (context) => const AdminHomePage(status: 1),
         },
       ),
     );

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ApiConfig {
@@ -8,8 +7,9 @@ class ApiConfig {
   String productImageUrl;
 
   ApiConfig({
-    this.baseUrl = "https://5a83-140-213-176-105.ngrok-free.app",
-    this.productImageUrl = "xx",
+    this.baseUrl = "https://d4dc-103-28-112-109.ngrok-free.app",
+    this.productImageUrl =
+        "https://d4dc-103-28-112-109.ngrok-free.app/storage/product_images",
   });
 
   Future<Map<String, dynamic>> login(String email, String password) async {
@@ -42,7 +42,15 @@ class ApiConfig {
     return json.decode(response.body) as Map<String, dynamic>;
   }
 
-  // Stream<Map<String, dynamic>> fetchAllActiveProduct() {
-  //   return null;
-  // }
+  Future<Map<String, dynamic>> fethAllProduct(int status, String? token) async {
+    //0 finished, 1 onprogress
+    final apiUrl = "$baseUrl/api/product/get-products/$status";
+    final response = await http
+        .get(Uri.parse(apiUrl), headers: {'Authorization': 'Bearer $token'});
+    return json.decode(response.body);
+  }
+
+  String fetchImageProduct(String imageName) {
+    return "$productImageUrl/$imageName";
+  }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:frontend_flutter/blocs/authentication/bloc/auth_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
+import 'package:frontend_flutter/presentations/auth/login_page.dart';
 import 'package:frontend_flutter/widgets/app_large_text.dart';
 import 'package:frontend_flutter/widgets/app_logo.dart';
 import 'package:frontend_flutter/widgets/app_text.dart';
@@ -26,7 +27,8 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthRegisterSuccess) {
-          Navigator.pushNamed(context, "/login");
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LoginPage()));
         } else if (state is AuthRegisterEmailFailed) {
           showDialog(
             context: context,
@@ -184,7 +186,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             const SizedBox(width: 5),
                             InkWell(
                               onTap: () {
-                                Navigator.pushNamed(context, "/login");
+                                Navigator.pop(context);
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage()));
                               },
                               child: const AppText(
                                 text: "Login",
