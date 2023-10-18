@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:frontend_flutter/blocs/authentication/bloc/auth_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
 import 'package:frontend_flutter/presentations/admin/admin_home_page.dart';
+import 'package:frontend_flutter/presentations/user/user_home_page.dart';
 import 'package:frontend_flutter/service/api_config.dart';
 import 'package:frontend_flutter/widgets/app_large_text.dart';
 import 'package:frontend_flutter/widgets/app_logo.dart';
@@ -50,7 +51,10 @@ class _LoginPageState extends State<LoginPage> {
                   builder: (context) => const AdminHomePage(status: 1)));
         }
 
-        if (state is AuthLoginSuccessUser) {}
+        if (state is AuthLoginSuccessUser) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const UserHomePage()));
+        }
       },
       builder: (context, state) {
         return Scaffold(

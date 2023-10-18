@@ -14,14 +14,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final response = await ApiConfig().login(event.email, event.password);
       final responseData = response["data"];
-      print(responseData);
-      final responseDataToken = responseData["token"];
       final responseMessage = response["message"];
       if (responseData != null) {
+        final responseDataToken = responseData["token"];
         final responseDataUser = responseData["user"];
         final responseDataUserType = responseDataUser["type"];
         prefs.setInt('user_id', responseDataUser["id"]);
         prefs.setString('user_token', responseDataToken);
+        prefs.setString('user_type', responseDataUserType);
         if (responseDataUserType == "admin") {
           emit(AuthLoginSuccessAdmin());
         } else {
@@ -42,5 +42,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthRegisterSuccess());
       }
     });
+  }
+
+  Future<void> logoutUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("user_id");
+    prefs.remove("user_token");
+    prefs.remove("user_type");
   }
 }

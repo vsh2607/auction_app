@@ -18,3 +18,8 @@ class AppFunctions {
         symbol: 'Rp',
       );
 }
+
+class AppTimer {
+  static String dateDeadlineFormat(String initialFormat) =>
+      (DateFormat('d MMMM y, HH:mm')).format(DateTime.parse(initialFormat));
+}

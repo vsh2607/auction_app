@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:frontend_flutter/blocs/product/bloc/product_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
+import 'package:frontend_flutter/presentations/product/product_detail_page.dart';
 import 'package:frontend_flutter/widgets/app_large_text.dart';
+import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
 class ProductListPage extends StatefulWidget {
   final int status;
@@ -15,10 +17,33 @@ class ProductListPage extends StatefulWidget {
 class _ProductListPageState extends State<ProductListPage> {
   late Future<Map<String, dynamic>> data;
 
+  Future<void> pusher() async {
+    PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
+    try {
+      await pusher.init(
+        apiKey: "eefd7b8cb5d4753440bb",
+        cluster: "ap1",
+      );
+      final myChannel = await pusher.subscribe(
+          channelName: "product-added",
+          onEvent: (event) {
+            print("This is the event : $event");
+            setState(() {
+              data = ProductBloc().fethAllProduct(widget.status);
+            });
+          });
+
+      await pusher.connect();
+    } catch (e) {
+      print("ERROR: $e");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     data = ProductBloc().fethAllProduct(widget.status);
+    pusher();
   }
 
   @override
@@ -47,8 +72,12 @@ class _ProductListPageState extends State<ProductListPage> {
                   final DateTime date = DateTime.parse(data["product_ddl"]);
                   return InkWell(
                     onTap: () {
-                      // Navigator.pushNamed(context, "/user-product-detail",
-                      //     arguments: product);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductDetailPage(
+                                    productId: data["id"],
+                                  )));
                     },
                     child: SizedBox(
                       height: 270,

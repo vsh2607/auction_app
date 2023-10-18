@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -7,9 +8,9 @@ class ApiConfig {
   String productImageUrl;
 
   ApiConfig({
-    this.baseUrl = "https://d4dc-103-28-112-109.ngrok-free.app",
+    this.baseUrl = "https://humbly-logical-lemming.ngrok-free.app",
     this.productImageUrl =
-        "https://d4dc-103-28-112-109.ngrok-free.app/storage/product_images",
+        "https://humbly-logical-lemming.ngrok-free.app/storage/product_images",
   });
 
   Future<Map<String, dynamic>> login(String email, String password) async {
@@ -52,5 +53,80 @@ class ApiConfig {
 
   String fetchImageProduct(String imageName) {
     return "$productImageUrl/$imageName";
+  }
+
+  Future<Map<String, dynamic>> fetchDetailProduct(
+      int productId, String token) async {
+    final apiUrl = "$baseUrl/api/product/get-product/$productId";
+    final response = await http
+        .get(Uri.parse(apiUrl), headers: {'Authorization': 'Bearer $token'});
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> fetchBidders(int productId, String token) async {
+    final apiUrl = "$baseUrl/api/bidding/get-bidders-by-productid/$productId";
+    final response = await http
+        .get(Uri.parse(apiUrl), headers: {'Authorization': 'Bearer $token'});
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> fetchDetailProductBidders(
+      int productId, String token) async {
+    final apiUrl = "$baseUrl/api/bidding/get-bidders-by-productid/$productId";
+    final response = await http
+        .get(Uri.parse(apiUrl), headers: {'Authorization': 'Bearer $token'});
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> fetchProductUnits() async {
+    final apiUrl = "$baseUrl/api/get-product-unit";
+    final response = await http.get(Uri.parse(apiUrl));
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> addNewBidding(
+      String productId, String userId, String bidAmount, String token) async {
+    final apiUrl = "$baseUrl/api/bidding/add-bidding";
+    final Map<String, dynamic> data = {
+      'product_id': productId,
+      'user_id': userId,
+      'bidding_amount': bidAmount
+    };
+    final response = await http.post(Uri.parse(apiUrl),
+        body: data, headers: {'Authorization': 'Bearer $token'});
+    print(response.body);
+    return json.decode(response.body) as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> addNewProduct(
+      String productName,
+      File? productImage,
+      int productSize,
+      String productUnit,
+      String? productDescription,
+      int productInitialPrice,
+      String productDeadline,
+      String? token) async {
+    final apiUrl = "$baseUrl/api/product/add-product";
+    final request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    request.headers['Authorization'] = 'Bearer $token';
+
+    if (productImage != null) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+            'product_img_path', productImage!.readAsBytesSync(),
+            filename: productImage.path),
+      );
+    }
+
+    request.fields["product_name"] = productName;
+    request.fields["product_size"] = productSize.toString();
+    request.fields["product_unit"] = productUnit;
+    request.fields["product_description"] = productDescription!;
+    request.fields["product_initial_price"] = productInitialPrice.toString();
+    request.fields["product_ddl"] = productDeadline;
+    final response = await http.Response.fromStream(await request.send());
+    print("response status code ${response.statusCode}");
+    return json.decode(response.body);
   }
 }
