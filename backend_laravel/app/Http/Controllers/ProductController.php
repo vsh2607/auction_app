@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProductAdded;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -40,6 +41,8 @@ class ProductController extends Controller
 
         ];
         $product = Product::create($productData);
+        $data = $this->success($product, 'Product addedd successfully');
+        ProductAdded::dispatch($data);
         return $this->success($product, 'Product added successfully');
     }
 
