@@ -45,10 +45,8 @@ class _LoginPageState extends State<LoginPage> {
         }
 
         if (state is AuthLoginSuccessAdmin) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const AdminHomePage(status: 1)));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const AdminHomePage(status: 1)));
         }
 
         if (state is AuthLoginSuccessUser) {

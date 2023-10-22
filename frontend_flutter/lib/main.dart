@@ -33,11 +33,9 @@ class MyApp extends StatelessWidget {
         routes: {
           loginRoute: (context) => const LoginPage(),
           registerRoute: (context) => const RegisterPage(),
-          adminHomeRoute: (context) => const AdminHomePage(
-                status: 1,
-              ),
+          adminHomeRoute: (context) => const AdminHomePage(status: 1),
           userHomeRoute: (context) => const UserHomePage(),
-          splashScreenRoute: (context) => const SplashScreenPage()
+          splashScreenRoute: (context) => const SplashScreenPage(),
         },
       ),
     );

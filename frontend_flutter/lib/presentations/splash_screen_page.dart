@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend_flutter/blocs/splash_screen/bloc/splash_screen_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
 import 'package:frontend_flutter/presentations/admin/admin_home_page.dart';
-import 'package:frontend_flutter/presentations/auth/login_page.dart';
 import 'package:frontend_flutter/presentations/user/user_home_page.dart';
 import 'package:frontend_flutter/widgets/app_logo.dart';
 
@@ -30,10 +29,8 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
           if (state is HasNotLogin) {
             Navigator.pushReplacementNamed(context, "/login");
           } else if (state is HasLoginAdmin) {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const AdminHomePage(status: 1)));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const AdminHomePage(status: 1,)));
           } else if (state is HasLoginUser) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => const UserHomePage()));
