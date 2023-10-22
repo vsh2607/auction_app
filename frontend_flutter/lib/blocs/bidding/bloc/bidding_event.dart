@@ -1,6 +1,5 @@
 part of 'bidding_bloc.dart';
 
-@immutable
 abstract class BiddingEvent {}
 
 class AddBidding extends BiddingEvent {

@@ -1,6 +1,5 @@
 part of 'bidding_bloc.dart';
 
-@immutable
 abstract class BiddingState {}
 
 final class BiddingInitial extends BiddingState {}

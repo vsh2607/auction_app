@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:frontend_flutter/blocs/product/bloc/product_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
 import 'package:frontend_flutter/presentations/product/product_detail_page.dart';
+import 'package:frontend_flutter/pusher.dart';
+import 'package:frontend_flutter/service/api_config.dart';
 import 'package:frontend_flutter/widgets/app_large_text.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
@@ -15,68 +19,54 @@ class ProductListPage extends StatefulWidget {
 }
 
 class _ProductListPageState extends State<ProductListPage> {
-  late Future<Map<String, dynamic>> data;
+  final StreamController<Map<String, dynamic>> _productStreamController =
+      StreamController<Map<String, dynamic>>();
 
-  Future<void> pusher() async {
-    PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
-    try {
-      await pusher.init(
-        apiKey: "eefd7b8cb5d4753440bb",
-        cluster: "ap1",
-      );
-      final myChannel = await pusher.subscribe(
-          channelName: "product-added",
-          onEvent: (event) {
-            print("This is the event : $event");
-            setState(() {
-              data = ProductBloc().fethAllProduct(widget.status);
-            });
-          });
+  PusherService pusherService = PusherService();
 
-      await pusher.connect();
-    } catch (e) {
-      print("ERROR: $e");
-    }
+  Future<void> fetchFromApi() async {
+    Future.delayed(const Duration(seconds: 3));
+    ApiConfig().fetchAllProductStream(widget.status).listen((data) {
+      _productStreamController.add(data);
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    data = ProductBloc().fethAllProduct(widget.status);
-    pusher();
+    fetchFromApi();
+    pusherService.initializePusher();
+    pusherService.subscribeToChannel("product-added", (event) {
+      print(event);
+      fetchFromApi();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Center(
-            child: FutureBuilder<Map<String, dynamic>>(
-          future: data,
+    return Scaffold(
+        backgroundColor: AppColors.backGreyColor,
+        body: StreamBuilder<Map<String, dynamic>>(
+          stream: _productStreamController.stream,
           builder: (context, snapshot) {
+            List<dynamic>? test = snapshot.data?["data"];
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              final Map<String, dynamic> product = snapshot.data!;
-              final List<dynamic> productData = product["data"];
-              if (productData.isEmpty) {
-                return Text('Tidak ada daftar barang');
-              }
-              return ListView.builder(
-                itemCount: productData.length,
+              return Center(child: CircularProgressIndicator());
+            } else if (test?.length == 0) {
+              return Center(child: Text("Tidak ada data"));
+            }
+            return ListView.builder(
+                itemCount: test?.length,
                 itemBuilder: (context, index) {
-                  final productItem = productData[index];
-                  final data = productItem as Map<String, dynamic>;
-                  final DateTime date = DateTime.parse(data["product_ddl"]);
+                  Map<String, dynamic> mapData = test?[index];
+                  final DateTime date = DateTime.parse(mapData["product_ddl"]);
                   return InkWell(
                     onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProductDetailPage(
-                                    productId: data["id"],
+                                    productId: mapData["id"],
                                   )));
                     },
                     child: SizedBox(
@@ -99,7 +89,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                         height: 160,
                                         child: Image.network(
                                           ProductBloc().fetchImageProduct(
-                                              data["product_img_path"]),
+                                              mapData["product_img_path"]),
                                           fit: BoxFit.cover,
                                         ),
                                       )
@@ -109,7 +99,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                     bottom: 50,
                                     right: 0,
                                     child: Container(
-                                      width: 180,
+                                      width: 190,
                                       height: 40,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
@@ -130,7 +120,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                       child: Row(
                                         children: [
                                           Container(
-                                            width: 45,
+                                            width: 54,
                                             alignment: Alignment.center,
                                             decoration: const BoxDecoration(
                                               color: AppColors.mainColor,
@@ -140,7 +130,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                               ),
                                             ),
                                             child: Text(
-                                              '${data["product_size"]} ${data["product_unit"]}',
+                                              '${mapData["product_size"]} ${mapData["product_unit"]}',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -183,7 +173,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   AppLargeText(
-                                    text: data["product_name"],
+                                    text: mapData["product_name"],
                                     color: AppColors.mainColor,
                                     size: 18,
                                   ),
@@ -192,8 +182,8 @@ class _ProductListPageState extends State<ProductListPage> {
                                     children: [
                                       AppLargeText(
                                         text: (AppFunctions.rupiahFormat
-                                            .format(
-                                                data["product_current_price"])
+                                            .format(mapData[
+                                                "product_current_price"])
                                             .toString()),
                                         color: Colors.black,
                                         size: 15,
@@ -208,12 +198,8 @@ class _ProductListPageState extends State<ProductListPage> {
                       ),
                     ),
                   );
-                },
-              );
-            }
+                });
           },
-        ))
-      ],
-    );
+        ));
   }
 }

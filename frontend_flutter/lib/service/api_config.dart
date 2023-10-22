@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiConfig {
   String baseUrl;
@@ -12,6 +13,11 @@ class ApiConfig {
     this.productImageUrl =
         "https://humbly-logical-lemming.ngrok-free.app/storage/product_images",
   });
+
+  Future<String?> getToken() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getString("user_token");
+  }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     final apiUrl = "$baseUrl/api/auth/login";
@@ -47,8 +53,27 @@ class ApiConfig {
     //0 finished, 1 onprogress
     final apiUrl = "$baseUrl/api/product/get-products/$status";
     final response = await http
-        .get(Uri.parse(apiUrl), headers: {'Authorization': 'Bearer $token'});
+        .get(Uri.parse(apiUrl), headers: {'Authorization': 'Bearer ${await getToken()}'});
     return json.decode(response.body);
+  }
+
+  Future<int> loginWithToken(String? token) async {
+    final apiUrl = "$baseUrl/api/auth/login-token";
+    final response = await http.post(Uri.parse(apiUrl), headers: {
+      'Authorization': 'Bearer $token',
+      'Accept': 'application/json'
+    });
+    return response.statusCode;
+  }
+
+  Stream<Map<String, dynamic>> fetchAllProductStream(
+      int status) async* {
+    final apiUrl = "$baseUrl/api/product/get-products/$status";
+    final response = await http.get(Uri.parse(apiUrl), headers: {
+      'Authorization': 'Bearer ${await getToken()}',
+      'Accept': 'application/json'
+    });
+    yield json.decode(response.body) as Map<String, dynamic>;
   }
 
   String fetchImageProduct(String imageName) {

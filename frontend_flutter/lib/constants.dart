@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class AppColors {
   static const mainColor = Color.fromRGBO(208, 107, 55, 1);
+  static const backGreyColor = Color.fromRGBO(247, 242, 242, 1);
 }
 
 class AppConstants {

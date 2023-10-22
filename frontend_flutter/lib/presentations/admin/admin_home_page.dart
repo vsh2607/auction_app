@@ -46,37 +46,41 @@ class _AdminHomePageState extends State<AdminHomePage> {
               backgroundColor: AppColors.mainColor,
               bottom: const TabBar(indicatorColor: Colors.white, tabs: [
                 Tab(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.hourglass_bottom,
-                        color: Colors.white,
-                        size: 14.0,
-                      ),
-                      SizedBox(width: 8),
-                      AppText(
-                        text: "Berjalan",
-                        size: 14,
-                        color: Colors.white,
-                      ),
-                    ],
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.hourglass_bottom,
+                          color: Colors.white,
+                          size: 14.0,
+                        ),
+                        SizedBox(width: 8),
+                        AppText(
+                          text: "Berjalan",
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Tab(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 14.0,
-                      ),
-                      SizedBox(width: 8),
-                      AppText(
-                        text: "Selesai",
-                        size: 14,
-                        color: Colors.white,
-                      ),
-                    ],
+                  child: Center(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 14.0,
+                        ),
+                        SizedBox(width: 8),
+                        AppText(
+                          text: "Selesai",
+                          size: 14,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Tab(
