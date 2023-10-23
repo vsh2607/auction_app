@@ -25,7 +25,6 @@ class _ProductListPageState extends State<ProductListPage> {
   PusherService pusherService = PusherService();
 
   Future<void> fetchFromApi() async {
-    Future.delayed(const Duration(seconds: 3));
     ApiConfig().fetchAllProductStream(widget.status).listen((data) {
       _productStreamController.add(data);
     });
@@ -36,10 +35,8 @@ class _ProductListPageState extends State<ProductListPage> {
     super.initState();
     fetchFromApi();
     pusherService.initializePusher();
-    pusherService.subscribeToChannel("product-added", (event) {
-      print(event);
-      fetchFromApi();
-    });
+    pusherService.subscribeToChannel("product-added", (event) => fetchFromApi()
+    );
   }
 
   @override
