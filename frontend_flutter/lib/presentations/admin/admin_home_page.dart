@@ -4,6 +4,7 @@ import 'package:frontend_flutter/blocs/authentication/bloc/auth_bloc.dart';
 import 'package:frontend_flutter/blocs/product/bloc/product_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
 import 'package:frontend_flutter/presentations/admin/admin_add_product_page.dart';
+import 'package:frontend_flutter/presentations/admin/admin_user_list_page.dart';
 import 'package:frontend_flutter/presentations/auth/login_page.dart';
 import 'package:frontend_flutter/presentations/product/product_list_page.dart';
 import 'package:frontend_flutter/widgets/admin_bottom_nav.dart';
@@ -105,7 +106,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             body: const TabBarView(children: [
               ProductListPage(status: 1),
               ProductListPage(status: 0),
-              Center(child: Text("Daftar User"))
+              AdminUserListPage()
             ]),
             floatingActionButton: FloatingActionButton(
               onPressed: () {

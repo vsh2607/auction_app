@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:frontend_flutter/blocs/authentication/bloc/auth_bloc.dart';
 import 'package:frontend_flutter/service/api_config.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,11 +15,9 @@ class SplashScreenBloc extends Bloc<SplashScreenEvent, SplashScreenState> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       if (prefs.get("user_token") != null) {
         final loginStatusCode = await ApiConfig()
-            .loginWithToken(prefs.get("user_token").toString());
+            .loginWithToken();
         if (loginStatusCode == 401) {
-          prefs.remove("user_id");
-          prefs.remove("user_token");
-          prefs.remove("user_type");
+          AuthBloc().logoutUser();
           emit(HasNotLogin());
         } else {
           if (prefs.getString("user_type") == "admin") {

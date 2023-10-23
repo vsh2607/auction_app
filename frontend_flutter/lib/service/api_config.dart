@@ -49,30 +49,32 @@ class ApiConfig {
     return json.decode(response.body) as Map<String, dynamic>;
   }
 
-  Future<Map<String, dynamic>> fethAllProduct(int status, String? token) async {
-    //0 finished, 1 onprogress
-    final apiUrl = "$baseUrl/api/product/get-products/$status";
-    final response = await http
-        .get(Uri.parse(apiUrl), headers: {'Authorization': 'Bearer ${await getToken()}'});
-    return json.decode(response.body);
-  }
-
-  Future<int> loginWithToken(String? token) async {
+  Future<int> loginWithToken() async {
     final apiUrl = "$baseUrl/api/auth/login-token";
     final response = await http.post(Uri.parse(apiUrl), headers: {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${await getToken()}',
       'Accept': 'application/json'
     });
     return response.statusCode;
   }
 
-  Stream<Map<String, dynamic>> fetchAllProductStream(
-      int status) async* {
+  Stream<Map<String, dynamic>> fetchAllProductStream(int status) async* {
     final apiUrl = "$baseUrl/api/product/get-products/$status";
     final response = await http.get(Uri.parse(apiUrl), headers: {
       'Authorization': 'Bearer ${await getToken()}',
       'Accept': 'application/json'
     });
+    print("ini adalah dari dari apiconfig ${json.decode(response.body) as Map<String, dynamic>}");
+    yield json.decode(response.body) as Map<String, dynamic>;
+  }
+
+  Stream<Map<String, dynamic>> fetchAllUserStream() async* {
+    final apiUrl = "$baseUrl/api/user/get-all-users";
+    final response = await http.get(Uri.parse(apiUrl), headers: {
+      'Authorization': 'Bearer ${await getToken()}',
+      'Accept': 'application/json'
+    });
+    print("ini adalah dari dari apiconfig ${json.decode(response.body) as Map<String, dynamic>}");
     yield json.decode(response.body) as Map<String, dynamic>;
   }
 
