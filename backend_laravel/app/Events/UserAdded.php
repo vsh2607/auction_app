@@ -10,16 +10,17 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ProductStatusChecked implements ShouldBroadcast
+class UserAdded implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public $message;
+    public function __construct($message)
     {
-        //
+        $this->message = $message;
     }
 
     /**
@@ -30,7 +31,7 @@ class ProductStatusChecked implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('product-status-checked'),
+            new Channel('user-added'),
         ];
     }
 }

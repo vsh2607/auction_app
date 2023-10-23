@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserAdded;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -76,7 +77,7 @@ class AuthController extends Controller
         $data["password"] = Hash::make($data["password"]);
         $user = User::create($data);
         $token = $user->createToken(User::USER_TOKEN);
-
+        UserAdded::dispatch("New user added successfully");
         return $this->success(['user' => $user, 'token' => $token->plainTextToken], 'User has been registered successfully');
     }
 

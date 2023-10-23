@@ -39,8 +39,13 @@ class UserController extends Controller
         return $this->success($this->user);
     }
 
+    public function getUserById($userId){
+        $user = User::where('id', $userId)->first();
+        return $this->success($user);
+    }
+
     public function getAllUsers(){
-        $users = User::orderBy('name', 'asc')->get();
+        $users = User::orderBy('name', 'asc')->where('type', 'user')->get();
         return $this->success($users);
     }
 

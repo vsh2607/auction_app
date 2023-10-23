@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bidding;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class BiddingController extends Controller
@@ -39,7 +40,7 @@ class BiddingController extends Controller
     }
 
     public function getBiddersByProductId(int $productId){
-        $bidders = Bidding::with(['user'])->where('product_id', $productId)->get();
+        $bidders = Bidding::with(['user'])->select('product_id', 'user_id', DB::raw('MAX(bidding_amount) as max_bidding_amount'))->where('product_id', $productId)->groupBy('user_id')->get();
         return $this->success($bidders);
     }
 
