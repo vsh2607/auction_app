@@ -4,8 +4,11 @@ import 'package:frontend_flutter/blocs/authentication/bloc/auth_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
 import 'package:frontend_flutter/presentations/auth/login_page.dart';
 import 'package:frontend_flutter/presentations/product/product_list_page.dart';
+import 'package:frontend_flutter/presentations/user/user_bidded_product_page.dart';
+import 'package:frontend_flutter/pusher.dart';
 import 'package:frontend_flutter/widgets/app_large_text.dart';
 import 'package:frontend_flutter/widgets/app_text.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class UserHomePage extends StatefulWidget {
   const UserHomePage({super.key});
@@ -19,6 +22,7 @@ class _UserHomePageState extends State<UserHomePage> {
   void dispose() {
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +73,7 @@ class _UserHomePageState extends State<UserHomePage> {
                     ),
                     SizedBox(width: 8),
                     AppText(
-                      text: "Selesai",
+                      text: "Tawaran Saya",
                       size: 14,
                       color: Colors.white,
                     ),
@@ -80,7 +84,7 @@ class _UserHomePageState extends State<UserHomePage> {
           ),
           body: TabBarView(children: [
             ProductListPage(status: 1),
-            ProductListPage(status: 0),
+            UserBiddedListProductPage(),
           ]),
         ));
   }

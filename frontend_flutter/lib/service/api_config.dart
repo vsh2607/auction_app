@@ -67,6 +67,15 @@ class ApiConfig {
     yield json.decode(response.body) as Map<String, dynamic>;
   }
 
+  Stream<Map<String, dynamic>> fetchAllProductBiddedByCurrentuser() async*{
+     final apiUrl = "$baseUrl/api/user/get-user-bid-products";
+    final response = await http.get(Uri.parse(apiUrl), headers: {
+      'Authorization': 'Bearer ${await getToken()}',
+      'Accept': 'application/json'
+    });
+    yield json.decode(response.body) as Map<String, dynamic>;
+  }
+
   Stream<Map<String, dynamic>> fetchAllUserStream() async* {
     final apiUrl = "$baseUrl/api/user/get-all-users";
     final response = await http.get(Uri.parse(apiUrl), headers: {
