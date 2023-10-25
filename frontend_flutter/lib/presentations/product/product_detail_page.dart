@@ -5,7 +5,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:frontend_flutter/blocs/bidding/bloc/bidding_bloc.dart';
 import 'package:frontend_flutter/blocs/product/bloc/product_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
-import 'package:frontend_flutter/presentations/admin/admin_bidders_list_page.dart';
 import 'package:frontend_flutter/widgets/app_large_text.dart';
 import 'package:frontend_flutter/widgets/app_text.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
@@ -211,13 +210,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     height: 80.0,
                                     child: ElevatedButton(
                                         onPressed: () {
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ListBiddersPage(
-                                                          productId:
-                                                              result["id"])));
+                                         
                                         },
                                         style: ElevatedButton.styleFrom(
                                           primary: AppColors.mainColor,

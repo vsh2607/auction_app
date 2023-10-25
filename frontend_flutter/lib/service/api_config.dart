@@ -64,7 +64,6 @@ class ApiConfig {
       'Authorization': 'Bearer ${await getToken()}',
       'Accept': 'application/json'
     });
-    print("ini adalah dari dari apiconfig ${json.decode(response.body) as Map<String, dynamic>}");
     yield json.decode(response.body) as Map<String, dynamic>;
   }
 
@@ -74,7 +73,25 @@ class ApiConfig {
       'Authorization': 'Bearer ${await getToken()}',
       'Accept': 'application/json'
     });
-    print("ini adalah dari dari apiconfig ${json.decode(response.body) as Map<String, dynamic>}");
+    yield json.decode(response.body) as Map<String, dynamic>;
+  }
+
+  Stream<Map<String, dynamic>> fetchBiddersByProductIdStream(int? productId) async*{
+    final apiUrl = "$baseUrl/api/bidding/get-bidders-by-productid/$productId";
+    final response = await http.get(Uri.parse(apiUrl), headers: {
+      'Authorization': 'Bearer ${await getToken()}',
+      'Accept': 'application/json'
+    });
+    yield json.decode(response.body) as Map<String, dynamic>;
+
+  }
+
+  Stream<Map<String, dynamic>> fetchProductDetailStream(int? productId) async* {
+    final apiUrl = "$baseUrl/api/product/get-product/$productId";
+    final response = await http.get(Uri.parse(apiUrl), headers: {
+      'Authorization': 'Bearer ${await getToken()}',
+      'Accept': 'application/json'
+    });
     yield json.decode(response.body) as Map<String, dynamic>;
   }
 

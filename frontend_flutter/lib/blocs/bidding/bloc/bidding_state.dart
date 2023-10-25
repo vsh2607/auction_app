@@ -9,6 +9,8 @@ class AddBiddingFailed extends BiddingState {
   AddBiddingFailed({required this.message});
 }
 
+class BiddingLoading extends BiddingState{}
+
 class AddBiddingSuccess extends BiddingState {
   String message;
   AddBiddingSuccess({required this.message});

@@ -7,6 +7,8 @@ import 'package:frontend_flutter/blocs/splash_screen/bloc/splash_screen_bloc.dar
 import 'package:frontend_flutter/presentations/admin/admin_home_page.dart';
 import 'package:frontend_flutter/presentations/auth/login_page.dart';
 import 'package:frontend_flutter/presentations/auth/register_page.dart';
+import 'package:frontend_flutter/presentations/product/product_detail_admin.dart';
+import 'package:frontend_flutter/presentations/product/product_detail_user.dart';
 import 'package:frontend_flutter/presentations/splash_screen_page.dart';
 import 'package:frontend_flutter/presentations/user/user_home_page.dart';
 import 'package:frontend_flutter/route.dart';
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
           adminHomeRoute: (context) => const AdminHomePage(status: 1),
           userHomeRoute: (context) => const UserHomePage(),
           splashScreenRoute: (context) => const SplashScreenPage(),
+          adminDetailRoute: (context) => const ProductDetailAdminPage(),
+          userDetailRoute: (context) => const ProductDetailUserPage(),
         },
       ),
     );
