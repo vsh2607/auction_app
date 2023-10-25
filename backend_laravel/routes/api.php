@@ -47,3 +47,4 @@ Route::prefix('user')->middleware('auth:sanctum')->group(function(){
 });
 
 Route::get('get-product-unit', [ProductUnitController::class, 'index'])->name('get-product_unit');
+Route::get('get-test', [ProductController::class, 'test'])->name('get-test');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ProductAdded;
+use App\Events\TimesUp;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class ProductController extends Controller
         ]);
 
 
-        if($data['product_img_path'] != null){
+        if($data["product_img_path"] != null){
             $image = $request->file('product_img_path');
             $imageName = time().'_'.$request->product_name.'.'.$image->getClientOriginalExtension();
             $data['product_img_path'] = $imageName;
@@ -56,6 +57,10 @@ class ProductController extends Controller
     public function show(int $productId){
         $product = Product::where('id', $productId)->first();
         return $this->success($product, 'Product fetched successfully');
+    }
+
+    public function test(){
+        TimesUp::dispatch();
     }
 
 

@@ -20,17 +20,16 @@ class UserController extends Controller
 
     //Menampilkan semua product yang telah di bid user
     //0 : finished, 1 : on progress
-    public function getAllBidProducts($productStatus){
+    public function getAllBidProducts(){
 
         $data = Bidding::with('product')->select('product_id', DB::raw('MAX(bidding_amount) as max_bid_amount'))
     ->where('user_id', $this->user->id)
-    ->whereHas('product', function($query) use($productStatus){
-        $query->where('product_status', $productStatus);
-    })
     ->groupBy('product_id')
     ->get();
         return $this->success($data);
     }
+
+
 
 
 

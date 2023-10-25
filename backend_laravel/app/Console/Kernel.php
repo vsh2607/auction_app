@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Events\ProductAdded;
+use App\Events\TimesUp;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -22,6 +23,7 @@ class Kernel extends ConsoleKernel
             if(count($products) > 0){
                 Product::where('product_ddl', '<', Carbon::now())->where('product_status', 1)->update(['product_status' => 0]);
                 ProductAdded::dispatch("Product Deadline Updated");
+                TimesUp::dispatch();
             }
     
         })->everySecond();
