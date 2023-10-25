@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend_flutter/constants.dart';
 import 'package:frontend_flutter/pusher.dart';
 import 'package:frontend_flutter/service/api_config.dart';
+import 'package:frontend_flutter/widgets/app_large_text.dart';
+import 'package:frontend_flutter/widgets/app_text.dart';
 
 class AdminUserListPage extends StatefulWidget {
   const AdminUserListPage({super.key});
@@ -50,10 +52,30 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
                     itemCount: userData?.length,
                     itemBuilder: (context, index) {
                       Map<String, dynamic>? mapData = userData?[index];
-                      return ListTile(
-                        leading: Text(mapData?["no_telp"]),
-                        title: Text(mapData?["name"]),
-                      );
+                      return Container(
+                          padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 5),
+                          margin: const EdgeInsets.only(bottom: 15, top: 10, left: 20,right: 20),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 3)
+                              ],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(Icons.person, color: AppColors.mainColor,),
+                              SizedBox(width: 20),
+                              Column(children: [
+                                AppLargeText(text: mapData?["name"], size: 25, color:  AppColors.mainColor,),
+                                SizedBox(height: 10),
+                                Row(children: [
+                                  AppText(text: "${mapData?["email"]} - ${mapData?["no_telp"]}", size: 15, color: AppColors.mainColor,)
+                                ],)
+                              ],)
+                            ],
+                          ));
                     });
               }
             }));

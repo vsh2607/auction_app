@@ -48,10 +48,20 @@ dependencies:
   flutter_timer_countdown: ^1.0.5
   pusher_channels_flutter: ^2.2.0
   http: ^1.1.0
+  url_launcher: ^6.1.14
+  font_awesome_flutter: ^10.6.0
+  flutter_local_notifications: ^16.1.0
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "images/silahap_icon.png"
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -74,6 +84,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/silahap_logo.png
+    - images/avatar.png
+
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

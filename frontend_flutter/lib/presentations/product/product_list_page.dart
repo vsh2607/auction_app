@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:frontend_flutter/blocs/product/bloc/product_bloc.dart';
 import 'package:frontend_flutter/constants.dart';
-import 'package:frontend_flutter/presentations/product/product_detail_page.dart';
+import 'package:frontend_flutter/notification_helper.dart';
+import 'package:frontend_flutter/presentations/product/product_detail_admin.dart';
+import 'package:frontend_flutter/presentations/product/product_detail_user.dart';
 import 'package:frontend_flutter/pusher.dart';
 import 'package:frontend_flutter/service/api_config.dart';
 import 'package:frontend_flutter/widgets/app_large_text.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductListPage extends StatefulWidget {
   final int status;
@@ -23,6 +26,7 @@ class _ProductListPageState extends State<ProductListPage> {
       StreamController<Map<String, dynamic>>();
 
   PusherService pusherService = PusherService();
+  late String _userType;
 
   Future<void> fetchFromApi() async {
     ApiConfig().fetchAllProductStream(widget.status).listen((data) {
@@ -30,13 +34,28 @@ class _ProductListPageState extends State<ProductListPage> {
     });
   }
 
+  Future<void> fetchUserType() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    _userType = sp.getString("user_type")!;
+  }
+
+
+
   @override
   void initState() {
     super.initState();
     fetchFromApi();
+    fetchUserType();
+    NotificationHelper.initializeNotifications();
     pusherService.initializePusher();
-    pusherService.subscribeToChannel("product-added", (event) => fetchFromApi()
-    );
+    pusherService.subscribeToChannel("product-added", (event) {
+      fetchFromApi();
+      print("fetched");
+    });
+    pusherService.subscribeToChannel("times-up", (event) {
+      print("test");
+      NotificationHelper.showLocalNotification("Ini");
+    });
   }
 
   @override
@@ -59,12 +78,21 @@ class _ProductListPageState extends State<ProductListPage> {
                   final DateTime date = DateTime.parse(mapData["product_ddl"]);
                   return InkWell(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductDetailPage(
-                                    productId: mapData["id"],
-                                  )));
+                      if (_userType == "admin") {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProductDetailAdminPage(
+                                      productId: mapData["id"],
+                                    )));
+                      } else {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProductDetailUserPage(
+                                      productId: mapData["id"],
+                                    )));
+                      }
                     },
                     child: SizedBox(
                       height: 270,
@@ -93,10 +121,10 @@ class _ProductListPageState extends State<ProductListPage> {
                                     ],
                                   ),
                                   Positioned(
-                                    bottom: 50,
+                                    bottom: 60,
                                     right: 0,
                                     child: Container(
-                                      width: 190,
+                                      width: 200,
                                       height: 40,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
@@ -110,7 +138,7 @@ class _ProductListPageState extends State<ProductListPage> {
                                                 Colors.black.withOpacity(0.2),
                                             spreadRadius: 1,
                                             blurRadius: 4,
-                                            offset: Offset(0, 2),
+                                            offset: const Offset(0, 2),
                                           ),
                                         ],
                                       ),

@@ -16,6 +16,11 @@ class UserHomePage extends StatefulWidget {
 
 class _UserHomePageState extends State<UserHomePage> {
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 2,
@@ -29,9 +34,7 @@ class _UserHomePageState extends State<UserHomePage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  AuthBloc().logoutUser();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginPage()));
+                  showMyDialog();
                 },
                 icon: Icon(Icons.logout),
                 color: Colors.white,
@@ -80,5 +83,40 @@ class _UserHomePageState extends State<UserHomePage> {
             ProductListPage(status: 0),
           ]),
         ));
+  }
+
+  Future<dynamic> showMyDialog() {
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          "Konfirmasi Logout",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          "Apakah Anda Ingin Keluar?",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            style: TextButton.styleFrom(primary: Colors.grey),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Keluar'),
+            style: TextButton.styleFrom(primary: Colors.red),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              AuthBloc().logoutUser();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: ((context) => LoginPage())));
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

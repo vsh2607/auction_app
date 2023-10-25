@@ -16,8 +16,7 @@ class SplashScreenPage extends StatefulWidget {
 class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
-    BlocProvider.of<SplashScreenBloc>(context)
-        .add(SplashScreenCheckPreference());
+    BlocProvider.of<SplashScreenBloc>(context).add(SplashScreenCheckPreference());
     super.initState();
   }
 

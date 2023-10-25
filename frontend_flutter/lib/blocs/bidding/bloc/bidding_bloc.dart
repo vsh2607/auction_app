@@ -10,6 +10,7 @@ class BiddingBloc extends Bloc<BiddingEvent, BiddingState> {
   BiddingBloc() : super(BiddingInitial()) {
     on<BiddingEvent>((event, emit) {});
     on<AddBidding>((event, emit) async {
+      emit(BiddingLoading());
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString("user_token");
       final response = await ApiConfig().addNewBidding(
@@ -22,12 +23,5 @@ class BiddingBloc extends Bloc<BiddingEvent, BiddingState> {
       }
       print(response);
     });
-  }
-
-  Future<Map<String, dynamic>> fetchBidders(int productId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString("user_token");
-    final response = await ApiConfig().fetchBidders(productId, token!);
-    return response;
   }
 }

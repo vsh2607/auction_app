@@ -11,6 +11,11 @@ class AppColors {
 class AppConstants {
   static double quarterScreenHeight(BuildContext context) =>
       MediaQuery.of(context).size.height * 0.30;
+
+  static double customScreenHeight(BuildContext context, double size) =>
+      MediaQuery.of(context).size.height * size;
+  static double customScreenWidth(BuildContext context, double size) =>
+      MediaQuery.of(context).size.width * size;
 }
 
 class AppFunctions {

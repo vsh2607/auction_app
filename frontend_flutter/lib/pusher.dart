@@ -18,11 +18,12 @@ class PusherService {
 
   Future<void> subscribeToChannel(
       String channelName, Function(dynamic) onEventCallback) async {
-    await _pusher.subscribe(
+      await _pusher.subscribe(
         channelName: channelName,
         onEvent: (event) {
           onEventCallback(event);
         });
+
   }
 
   Future<void> disconnectPusher() async {
