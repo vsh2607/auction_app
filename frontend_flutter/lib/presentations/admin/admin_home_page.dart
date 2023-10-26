@@ -11,6 +11,7 @@ import 'package:frontend_flutter/widgets/app_text.dart';
 
 class AdminHomePage extends StatefulWidget {
   final int status;
+
   const AdminHomePage({super.key, required this.status});
 
   @override
@@ -18,10 +19,6 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
 
   @override
@@ -103,7 +100,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ]),
             ),
-            body: TabBarView(children: [
+            body: const TabBarView(children: [
               ProductListPage(
                 status: 1,
               ),
@@ -150,6 +147,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             onPressed: () {
               Navigator.of(ctx).pop();
               AuthBloc().logoutUser();
+
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: ((context) => LoginPage())));
             },

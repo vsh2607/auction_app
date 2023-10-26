@@ -10,9 +10,9 @@ class BiddingBloc extends Bloc<BiddingEvent, BiddingState> {
   BiddingBloc() : super(BiddingInitial()) {
     on<BiddingEvent>((event, emit) {});
     on<AddBidding>((event, emit) async {
-      emit(BiddingLoading());
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString("user_token");
+      emit(BiddingLoading());
       final response = await ApiConfig().addNewBidding(
           event.productId, event.userId, event.biddingAmount, token!);
       if (response["data"] == null) {

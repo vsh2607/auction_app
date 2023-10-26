@@ -8,7 +8,6 @@ import 'package:frontend_flutter/presentations/user/user_bidded_product_page.dar
 import 'package:frontend_flutter/pusher.dart';
 import 'package:frontend_flutter/widgets/app_large_text.dart';
 import 'package:frontend_flutter/widgets/app_text.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class UserHomePage extends StatefulWidget {
   const UserHomePage({super.key});
@@ -18,10 +17,6 @@ class UserHomePage extends StatefulWidget {
 }
 
 class _UserHomePageState extends State<UserHomePage> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
 
   @override
@@ -115,6 +110,7 @@ class _UserHomePageState extends State<UserHomePage> {
             onPressed: () {
               Navigator.of(ctx).pop();
               AuthBloc().logoutUser();
+             
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: ((context) => LoginPage())));
             },

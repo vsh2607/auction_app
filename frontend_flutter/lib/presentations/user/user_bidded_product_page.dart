@@ -26,23 +26,16 @@ class _UserBiddedListProductPageState extends State<UserBiddedListProductPage> {
   final StreamController<Map<String, dynamic>> _productStreamController =
       StreamController<Map<String, dynamic>>();
 
-
   Future<void> fetchFromApi() async {
     ApiConfig().fetchAllProductBiddedByCurrentuser().listen((data) {
       _productStreamController.add(data);
     });
   }
 
-  
-
-
-
   @override
   void initState() {
     super.initState();
     fetchFromApi();
-
-  
   }
 
   @override
@@ -65,11 +58,10 @@ class _UserBiddedListProductPageState extends State<UserBiddedListProductPage> {
                   final DateTime date = DateTime.parse(mapData["product_ddl"]);
                   return InkWell(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ProductDetailUserPage(
-                                    productId: mapData["id"],
+                              builder: (context) => ProductDetailUserPage(productId: mapData["id"],
                                   )));
                     },
                     child: SizedBox(

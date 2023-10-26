@@ -47,12 +47,6 @@ class _ProductListPageState extends State<ProductListPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    pusherService.disconnectPusher();
-  }
-
-  @override
   void initState() {
     super.initState();
     fetchFromApi();
@@ -61,7 +55,8 @@ class _ProductListPageState extends State<ProductListPage> {
     NotificationHelper.initializeNotifications();
     pusherService.initializePusher();
 
-    pusherService.subscribeToChannel("product-added", (event) =>fetchFromApi());
+    pusherService.subscribeToChannel(
+        "product-added", (event) => fetchFromApi());
     pusherService.subscribeToChannel("times-up", (event) {
       final eventData = json.decode(event.data);
       print('testingggg');
@@ -69,7 +64,6 @@ class _ProductListPageState extends State<ProductListPage> {
         NotificationHelper.showLocalNotification("Ini");
         print("gotcha");
       }
-
     });
   }
 
@@ -94,14 +88,16 @@ class _ProductListPageState extends State<ProductListPage> {
                   return InkWell(
                     onTap: () {
                       if (_userType == "admin") {
-                        Navigator.push(
+                        pusherService.disconnectPusher();
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ProductDetailAdminPage(
                                       productId: mapData["id"],
                                     )));
                       } else {
-                        Navigator.push(
+                        pusherService.disconnectPusher();
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ProductDetailUserPage(
@@ -242,4 +238,6 @@ class _ProductListPageState extends State<ProductListPage> {
           },
         ));
   }
+
+
 }
