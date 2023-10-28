@@ -200,7 +200,7 @@ class _ProductListPageState extends State<ProductListPage> {
                             ),
                           ),
                           Positioned(
-                            bottom: 10,
+                            bottom: 0,
                             left: 40,
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 10),

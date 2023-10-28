@@ -159,7 +159,7 @@ class _UserBiddedListProductPageState extends State<UserBiddedListProductPage> {
                             ),
                           ),
                           Positioned(
-                            bottom: 10,
+                            bottom: 5,
                             left: 40,
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 10),
