@@ -24,7 +24,7 @@ class NotificationHelper {
     );
     var platform = NotificationDetails(android: android);
     
-    await flutterLocalNotificationsPlugin.show(0,'Waktu telah habis','Cek produk $productName yang anda tawar',platform);
+    await flutterLocalNotificationsPlugin.show(0,'Waktu Lelang telah habis','Cek produk yang barusan anda tawar untuk mengecek apakah anda pemenangnya!',platform);
 
   }
 }

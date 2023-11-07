@@ -14,57 +14,28 @@ import 'package:frontend_flutter/widgets/app_large_text.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProductListPage extends StatefulWidget {
-  final int status;
-  const ProductListPage({super.key, required this.status});
+class UserBiddedListProductPage extends StatefulWidget {
+  const UserBiddedListProductPage({super.key});
 
   @override
-  State<ProductListPage> createState() => _ProductListPageState();
+  State<UserBiddedListProductPage> createState() =>
+      _UserBiddedListProductPageState();
 }
 
-class _ProductListPageState extends State<ProductListPage> {
+class _UserBiddedListProductPageState extends State<UserBiddedListProductPage> {
   final StreamController<Map<String, dynamic>> _productStreamController =
       StreamController<Map<String, dynamic>>();
 
-  late String _userType;
-  late int _userId;
-  PusherService pusherService = PusherService();
-
   Future<void> fetchFromApi() async {
-    ApiConfig().fetchAllProductStream(widget.status).listen((data) {
+    ApiConfig().fetchAllProductBiddedByCurrentuser().listen((data) {
       _productStreamController.add(data);
     });
-  }
-
-  Future<void> fetchUserType() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    _userType = sp.getString("user_type")!;
-    _userId = sp.getInt("user_id")!;
-  }
-
-  void requestNotificationPermission() async {
-    await Permission.notification.request();
   }
 
   @override
   void initState() {
     super.initState();
     fetchFromApi();
-    requestNotificationPermission();
-    fetchUserType();
-    NotificationHelper.initializeNotifications();
-    pusherService.initializePusher();
-
-    pusherService.subscribeToChannel(
-        "product-added", (event) => fetchFromApi());
-    pusherService.subscribeToChannel("times-up", (event) {
-      final eventData = json.decode(event.data);
-      print('testingggg');
-      if (eventData["data"].contains(_userId)) {
-        NotificationHelper.showLocalNotification("Ini");
-        print("gotcha");
-      }
-    });
   }
 
   @override
@@ -83,27 +54,15 @@ class _ProductListPageState extends State<ProductListPage> {
             return ListView.builder(
                 itemCount: test?.length,
                 itemBuilder: (context, index) {
-                  Map<String, dynamic> mapData = test?[index];
+                  Map<String, dynamic> mapData = test?[index]["product"];
                   final DateTime date = DateTime.parse(mapData["product_ddl"]);
                   return InkWell(
                     onTap: () {
-                      if (_userType == "admin") {
-                        pusherService.disconnectPusher();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductDetailAdminPage(
-                                      productId: mapData["id"],
-                                    )));
-                      } else {
-                        pusherService.disconnectPusher();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductDetailUserPage(
-                                      productId: mapData["id"],
-                                    )));
-                      }
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductDetailUserPage(productId: mapData["id"],
+                                  )));
                     },
                     child: SizedBox(
                       height: 270,
@@ -200,7 +159,7 @@ class _ProductListPageState extends State<ProductListPage> {
                             ),
                           ),
                           Positioned(
-                            bottom: 0,
+                            bottom: 5,
                             left: 40,
                             child: Padding(
                               padding: EdgeInsets.only(bottom: 10),
@@ -238,6 +197,4 @@ class _ProductListPageState extends State<ProductListPage> {
           },
         ));
   }
-
-
 }

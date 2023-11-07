@@ -53,29 +53,47 @@ class _AdminUserListPageState extends State<AdminUserListPage> {
                     itemBuilder: (context, index) {
                       Map<String, dynamic>? mapData = userData?[index];
                       return Container(
-                          padding: const EdgeInsets.only(left: 20, top: 5, bottom: 5, right: 5),
-                          margin: const EdgeInsets.only(bottom: 15, top: 10, left: 20,right: 20),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 3)
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        margin: const EdgeInsets.only(bottom: 15, top: 10, left: 20, right: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 3)],
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.person,
+                              color: AppColors.mainColor,
+                              size: 40,
+                            ),
+                            SizedBox(width: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AppLargeText(
+                                  text: "${mapData?["name"]}",
+                                  size: 25,
+                                  color: AppColors.mainColor,
+                                ),
+                                SizedBox(height: 5),
+                                AppText(
+                                  text: "${mapData?["email"]}",
+                                  size: 15,
+                                  color: AppColors.mainColor,
+                                ),
+                                SizedBox(height: 5),
+                                AppText(
+                                  text: "${mapData?["no_telp"]}",
+                                  size: 15,
+                                  color: AppColors.mainColor,
+                                ),
                               ],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(Icons.person, color: AppColors.mainColor,),
-                              SizedBox(width: 20),
-                              Column(children: [
-                                AppLargeText(text: mapData?["name"], size: 25, color:  AppColors.mainColor,),
-                                SizedBox(height: 10),
-                                Row(children: [
-                                  AppText(text: "${mapData?["email"]} - ${mapData?["no_telp"]}", size: 15, color: AppColors.mainColor,)
-                                ],)
-                              ],)
-                            ],
-                          ));
+                            ),
+                          ],
+                        ),
+                      );
                     });
               }
             }));
