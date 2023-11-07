@@ -22,15 +22,11 @@ class UserController extends Controller
     //0 : finished, 1 : on progress
     public function getAllBidProducts(){
 
-        $data = Bidding::with('product')->select('product_id', DB::raw('MAX(bidding_amount) as max_bid_amount'))
-    ->where('user_id', $this->user->id)
-    ->groupBy('product_id')
+        $data = Bidding::with('product')->select('product_id', DB::raw('MAX(bidding_amount) as max_bid_amount'))->where('user_id', $this->user->id)->groupBy('product_id')
+    ->latest()
     ->get();
         return $this->success($data);
     }
-
-
-
 
 
     //show current user profile

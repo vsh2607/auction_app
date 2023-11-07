@@ -10,18 +10,16 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TimesUp implements ShouldBroadcast
+class UserBidAdded  implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-
-    public $data;
-    public function __construct($data)
+    public function __construct()
     {
-        $this->data = $data;
+        //
     }
 
     /**
@@ -32,7 +30,7 @@ class TimesUp implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('times-up'),
+            new Channel('user-bid-added'),
         ];
     }
 }

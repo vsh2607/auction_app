@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Events\BiddingAdded;
+use App\Events\ProductAdded;
+use App\Events\UserBidAdded;
 use App\Models\Bidding;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -12,10 +14,7 @@ use Illuminate\Validation\Rule;
 class BiddingController extends Controller
 {
 
-    public function index()
-    {
-
-    }
+   
 
 
     public function store(Request $request)
@@ -37,6 +36,8 @@ class BiddingController extends Controller
         Bidding::create($data);
         $product->update(['product_current_price' => (int)$data['bidding_amount']]);
         BiddingAdded::dispatch();
+        ProductAdded::dispatch("Bidding updated");
+        UserBidAdded::dispatch();
         return $this->success($data, "Tawaran telah ditambahkan");
 
     }
@@ -53,10 +54,7 @@ class BiddingController extends Controller
     }
 
 
-    public function show(Bidding $bidding)
-    {
-
-    }
+   
 
 
 }

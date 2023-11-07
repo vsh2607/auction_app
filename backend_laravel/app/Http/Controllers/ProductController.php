@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Events\ProductAdded;
 use App\Events\TimesUp;
+use App\Models\Bidding;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ProductController extends Controller
 {
@@ -60,7 +62,19 @@ class ProductController extends Controller
     }
 
     public function test(){
-        TimesUp::dispatch();
+        // $products = Product::with(['biddings'])->select('user_id')->where('product_ddl', '<', Carbon::now())->where('product_status', 0)->get();
+        $biddings = Bidding::with(['user'])->select('user_id')->whereHas('product', function($query){
+            $query->where('product_ddl', '<', Carbon::now())->where('product_status', 0);
+        })->get();
+
+        $userId = [];
+        foreach($biddings as $bidding){
+            $userId[] = $bidding->user_id;
+        }
+
+        TimesUp::dispatch(array_values(array_unique($userId)));
+    
+        return $this->success($biddings);
     }
 
 

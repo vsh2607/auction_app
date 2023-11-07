@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Events\ProductAdded;
 use App\Events\TimesUp;
+use App\Models\Bidding;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -21,9 +22,19 @@ class Kernel extends ConsoleKernel
     
             $products = Product::where('product_ddl', '<', Carbon::now())->where('product_status', 1)->get();
             if(count($products) > 0){
+               
+                $biddings = Bidding::with(['user'])->select('user_id')->whereHas('product', function($query){
+                    $query->where('product_ddl', '<', Carbon::now())->where('product_status', 1);
+                })->get();
+        
+                $userId = [];
+                foreach($biddings as $bidding){
+                    $userId[] = $bidding->user_id;
+                }
+        
+                TimesUp::dispatch(array_values(array_unique($userId)));
                 Product::where('product_ddl', '<', Carbon::now())->where('product_status', 1)->update(['product_status' => 0]);
                 ProductAdded::dispatch("Product Deadline Updated");
-                TimesUp::dispatch();
             }
     
         })->everySecond();

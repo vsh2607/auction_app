@@ -37,10 +37,12 @@ Route::prefix('product')->middleware('auth:sanctum')->group(function(){
 Route::prefix('bidding')->middleware('auth:sanctum')->group(function(){
     Route::post('add-bidding', [BiddingController::class, 'store'])->name('add-bidding');
     Route::get('get-bidders-by-productid/{productId}', [BiddingController::class, 'getBiddersByProductId']);
+    Route::get("get-bidders-id-by-product-id/{productId}", [BiddingController::class, 'getBiddersIdByProductId']);
+
 });
 
 Route::prefix('user')->middleware('auth:sanctum')->group(function(){
-    Route::get('get-user-bid-products/{productStatus}', [UserController::class, 'getAllBidProducts']);
+    Route::get('get-user-bid-products', [UserController::class, 'getAllBidProducts']);
     Route::get('get-user-profile', [UserController::class, 'show'])->name('get-user-profile');
     Route::get('get-all-users',[UserController::class, 'getAllUsers'])->name('get-all-users');
     Route::get('get-user-by-id/{userId}', [UserController::class, 'getUserById'])->name('get-user-by-id');
